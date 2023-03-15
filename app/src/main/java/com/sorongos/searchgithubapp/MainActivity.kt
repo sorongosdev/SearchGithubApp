@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import com.sorongos.searchgithubapp.databinding.ActivityMainBinding
 import com.sorongos.searchgithubapp.model.Repo
+import com.sorongos.searchgithubapp.model.UserDto
 import com.sorongos.searchgithubapp.network.GithubService
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         val githubService = retrofit.create(GithubService::class.java) // 구현체
         githubService.listRepos("sorongosdev").enqueue(object: Callback<List<Repo>>{
             override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
-                Log.e("MainActivity",response.body().toString())
+                Log.e("MainActivity","search mine : ${response.body().toString()}")
             }
 
             override fun onFailure(call: Call<List<Repo>>, t: Throwable) {
@@ -37,5 +38,15 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+        githubService.searchUsers("squar").enqueue(object: Callback<UserDto> {
+            override fun onResponse(call: Call<UserDto>, response: Response<UserDto>) {
+                Log.e("MainActivity","search squar : ${response.body().toString()}")
+            }
+
+            override fun onFailure(call: Call<UserDto>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 }
