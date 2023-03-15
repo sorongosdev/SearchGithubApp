@@ -13,7 +13,7 @@ interface GithubService {
     @Headers("Authorization: Bearer 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")
 
     @GET("users/{username}/repos")
-    fun listRepos(@Path("username") username: String): Call<List<Repo>>
+    fun listRepos(@Path("username") username: String, @Query("page") page: Int): Call<List<Repo>>
 
     @GET("search/users")
     fun searchUsers(@Query("q") query: String): Call<UserDto>
