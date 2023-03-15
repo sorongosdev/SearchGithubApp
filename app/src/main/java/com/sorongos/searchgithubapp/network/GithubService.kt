@@ -10,8 +10,6 @@ import retrofit2.http.Query
 
 interface GithubService {
     /**헤더에 깃허브 토큰 추가*/
-    @Headers("Authorization: Bearer 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")
-
     @GET("users/{username}/repos")
     fun listRepos(@Path("username") username: String, @Query("page") page: Int): Call<List<Repo>>
 
