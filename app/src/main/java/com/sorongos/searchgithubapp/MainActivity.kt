@@ -2,6 +2,8 @@ package com.sorongos.searchgithubapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
@@ -25,6 +27,9 @@ class MainActivity : AppCompatActivity() {
         .baseUrl("https://api.github.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var searchFor: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,15 +55,25 @@ class MainActivity : AppCompatActivity() {
             adapter = userAdapter
         }
 
+        val runnable = Runnable{
+            searchUser()
+        }
+
         binding.searchEditText.addTextChangedListener {
-            searchUser(it.toString())
+            searchFor = it.toString()
+            /**시간을 멈췄을 때, 무한 루퍼가 돌지 않게, 대기 작업을 지움*/
+            handler.removeCallbacks(runnable)
+            handler.postDelayed(
+                runnable,
+                300,
+            )
         }
     }
 
-    private fun searchUser(query: String){
+    private fun searchUser(){
         val githubService = retrofit.create(GithubService::class.java) // 구현체
         //api call
-        githubService.searchUsers(query).enqueue(object: Callback<UserDto> {
+        githubService.searchUsers(searchFor).enqueue(object: Callback<UserDto> {
             override fun onResponse(call: Call<UserDto>, response: Response<UserDto>) {
                 Log.e("MainActivity","search squar : ${response.body().toString()}")
                 userAdapter.submitList(response.body()?.items) //userlist)
