@@ -1,5 +1,6 @@
 package com.sorongos.searchgithubapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -10,7 +11,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sorongos.searchgithubapp.adapter.UserAdapter
 import com.sorongos.searchgithubapp.databinding.ActivityMainBinding
-import com.sorongos.searchgithubapp.model.Repo
 import com.sorongos.searchgithubapp.model.UserDto
 import com.sorongos.searchgithubapp.network.GithubService
 import retrofit2.Call
@@ -49,7 +49,11 @@ class MainActivity : AppCompatActivity() {
 //
 //        })
 
-        userAdapter = UserAdapter()
+        userAdapter = UserAdapter{
+            val intent = Intent(this@MainActivity, RepoActivity::class.java)
+            intent.putExtra("username", it.username)
+            startActivity(intent)
+        }
         binding.userRecyclerView.apply {
             layoutManager = LinearLayoutManager(context,)
             adapter = userAdapter
@@ -65,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             handler.removeCallbacks(runnable)
             handler.postDelayed(
                 runnable,
-                300,
+                500,
             )
         }
     }
