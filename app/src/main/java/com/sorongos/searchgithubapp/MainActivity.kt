@@ -3,6 +3,8 @@ package com.sorongos.searchgithubapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.sorongos.searchgithubapp.adapter.UserAdapter
 import com.sorongos.searchgithubapp.databinding.ActivityMainBinding
 import com.sorongos.searchgithubapp.model.Repo
 import com.sorongos.searchgithubapp.model.UserDto
@@ -38,9 +40,16 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+        val userAdapter = UserAdapter()
+        binding.userRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context,)
+            adapter = userAdapter
+        }
+
         githubService.searchUsers("squar").enqueue(object: Callback<UserDto> {
             override fun onResponse(call: Call<UserDto>, response: Response<UserDto>) {
                 Log.e("MainActivity","search squar : ${response.body().toString()}")
+                userAdapter.submitList(response.body()?.items) //userlist)
             }
 
             override fun onFailure(call: Call<UserDto>, t: Throwable) {
