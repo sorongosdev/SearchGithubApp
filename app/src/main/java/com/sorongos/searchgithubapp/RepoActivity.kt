@@ -32,6 +32,8 @@ class RepoActivity : AppCompatActivity() {
         //from MainActivity
         val username = intent.getStringExtra("username") ?: ""
 
+        binding.usernameTextView.text = username
+
         repoAdapter = RepoAdapter()
 
         binding.repoRecyclerView.apply{
