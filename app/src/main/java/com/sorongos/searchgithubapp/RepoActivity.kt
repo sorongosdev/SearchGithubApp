@@ -70,6 +70,7 @@ class RepoActivity : AppCompatActivity() {
     }
 
     /**해당 유저 레포 리스트를 보여줌*/
+    @SuppressLint("SuspiciousIndentation")
     private fun listRepo(username: String, page: Int){
         val githubService = retrofit.create(GithubService::class.java)
             githubService.listRepos(username, page).enqueue(object: Callback<List<Repo>> {
